@@ -3,7 +3,7 @@ import 'package:base_for_flutter/data/constants.dart';
 import 'package:base_for_flutter/data/session.dart';
 import 'package:base_for_flutter/models/m_token.dart';
 import 'package:base_for_flutter/pages/views/report_list.dart';
-import 'package:base_for_flutter/utils/components/dialog.dart';
+import 'package:base_for_flutter/utils/helper/dialog.dart';
 import 'package:base_for_flutter/utils/values/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _email.text = "apps.user";
+    _email.text = "156.apps2";
     _password.text = "12345";
   }
 

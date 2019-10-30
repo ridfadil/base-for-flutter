@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:base_for_flutter/data/session.dart';
 import 'package:base_for_flutter/models/m_report.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 
 Map<String, String> params = {};
 Map<String, String> body = {};
@@ -16,8 +19,8 @@ class ApiService {
   /////////////// END POINT //////////////////////////
   static login(
       {@required BuildContext context,
-        @required String email,
-        @required String password}) async {
+      @required String email,
+      @required String password}) async {
     params.clear();
     await _dioSetting(false);
     params['username'] = email;
@@ -26,6 +29,45 @@ class ApiService {
     response = await dio.post("/auth/login", data: params);
 //    print(response);
     return response;
+  }
+
+  static postReport({
+    @required BuildContext context,
+    @required String formname,
+    @required String desc,
+    @required String projectid,
+    @required String reportno,
+    @required String employer,
+    @required String executor,
+    @required String vendor,
+    @required File image,
+  }) async {
+    try {
+      params.clear();
+      Dio dio = await _dioSetting(true);
+      FormData formData = FormData.fromMap({
+        "report[PROJECT_ID]": projectid,
+        "report[FORM_NAME]": formname,
+        "report[report_no]": reportno,
+        "report[report_employer]": employer,
+        "report[report_executor]": executor,
+        "report[report_vendor]": vendor,
+        "report[report_date]": "2019-07-16",
+        "report[report_location]": "kuningan",
+        "report[report_status]": "Draft",
+        "form[workdesc][report_work_description]": desc,
+        "attachments[0][at_status]": "Actived",
+        "attachments[0][at_title]": "flutter",
+        "attachments[0][at_link]": await MultipartFile.fromFile(
+            image.path,
+            filename: basename(image.path))
+      });
+      print("Form_data : " + formData.toString());
+      response = await dio.post("/report", data: formData);
+      return response;
+    } on DioError catch (e) {
+      return print("Dio err :"+e.toString());
+    }
   }
 
   static getReport({@required BuildContext context}) async {
