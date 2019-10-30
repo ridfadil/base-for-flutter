@@ -6,6 +6,7 @@ import 'package:base_for_flutter/utils/values/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pk_skeleton/pk_skeleton.dart';
 
 import 'create_report.dart';
 
@@ -14,18 +15,14 @@ class StudentActivity extends StatefulWidget {
   _StudentActivityState createState() => _StudentActivityState();
 }
 
-
 class _StudentActivityState extends State<StudentActivity> {
-
   ///Untuk search
   var _searchEdit = new TextEditingController();
   String _searchText = "";
   bool isSearch = false;
-  List <Data> _searchListItems = new List<Data>();
-  List <Data> _searchResult = new List<Data>();
-  List <Data> _listItems = new List<Data>();
-
-  List <Data> _listReport = new List<Data>();
+  List<Data> _searchListItems = new List<Data>();
+  List<Data> _searchResult = new List<Data>();
+  List<Data> _listItems = new List<Data>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,86 +34,96 @@ class _StudentActivityState extends State<StudentActivity> {
           backgroundColor: MyColor.skyBlue,
         ),
         body: Stack(
-            children: <Widget>[
-              SingleChildScrollView(
+          children: <Widget>[
+            SingleChildScrollView(
                 child: Column(
-                  children: <Widget>[
-                    FutureBuilder(
-                      /// ini panggil API dengan snapshotnya
-                        future: getReport(),
-                        builder: (context, snapshot) {
-                          ///apabila snapshot error
-                          if (snapshot.hasError) {
-                            return Container(
-                              height: 100,
-                              child: Center(child: Text(snapshot.error.toString())),
-                            );
-                          }
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
+              children: <Widget>[
+                FutureBuilder(
+
+                    /// ini panggil API dengan snapshotnya
+                    future: getReport(),
+                    builder: (context, snapshot) {
+                      ///apabila snapshot error
+                      if (snapshot.hasError) {
+                        return Container(
+                          height: 100,
+                          child: Center(child: Text(snapshot.error.toString())),
+                        );
+                      }
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Container(
+                              margin: EdgeInsets.only(top: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                      height: 1000,
+                                      child: PKCardListSkeleton(isCircularImage: false, isBottomLinesActive: false,)),
+                                ],
+                              ));
+                        case ConnectionState.done:
+                          if (snapshot.hasData) {
+                            if (snapshot.data.length == 0) {
                               return Container(
                                 margin: EdgeInsets.only(top: 20),
-                                child: Center(child: CircularProgressIndicator()),
+                                child: Text("Data tidak ditemukan"),
                               );
-                            case ConnectionState.done:
-                              if (snapshot.hasData) {
-                                if (snapshot.data.length == 0) {
-                                  return Container(
-                                    margin: EdgeInsets.only(top: 20),
-                                    child: Text("Data tidak ditemukan"),
-                                  );
-                                } else {
-                                  _searchListItems = snapshot.data;
-                                  _listItems = snapshot.data;
-                                  return Container(
-                                      margin: EdgeInsets.only(top: 40),
-                                      ///load data dengan search dan data bukan dengan search
-                                      child: isSearch? _searchListView() : _listView()
-                                  );
-                                }
-                              } else {
-                                return Container(
-                                  height: 100,
-                                  child: Center(child: Text("Data tidak ditemukan")),
-                                );
-                              }
-                              break;
-                            default:
-                              return Container();
-                          }
-                        }),
-                  ],
-                ),
-              ),
-              _searchBox(),
+                            } else {
+                              _searchListItems = snapshot.data;
+                              _listItems = snapshot.data;
+                              return Container(
+                                  margin: EdgeInsets.only(top: 40),
 
-              Align(
+                                  ///load data dengan search dan data bukan dengan search
+                                  child: isSearch
+                                      ? _searchListView()
+                                      : _listView());
+                            }
+                          } else {
+                            return Container(
+                              height: 100,
+                              child:
+                                  Center(child: Text("Data tidak ditemukan")),
+                            );
+                          }
+                          break;
+                        default:
+                          return Container();
+                      }
+                    }),
+              ],
+            )),
+            _searchBox(),
+            Align(
               alignment: Alignment.bottomRight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateReport(),
-                            ),
-                          );
-                        },
-                        child: Icon(Icons.add, color: Colors.yellow,),
-                        foregroundColor: Colors.pink,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreateReport(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.yellow,
                       ),
+                      foregroundColor: Colors.pink,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -169,7 +176,7 @@ class _StudentActivityState extends State<StudentActivity> {
           fillColor: Colors.white,
           hintText: 'Search Vendor',
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.cyan),
             borderRadius: BorderRadius.circular(2),
@@ -200,13 +207,13 @@ class _StudentActivityState extends State<StudentActivity> {
       return reportList.dataList;
     } else {
       Fluttertoast.showToast(
-          msg: "Kesalahan : " + responses.statusMessage, toastLength: Toast.LENGTH_SHORT);
+          msg: "Kesalahan : " + responses.statusMessage,
+          toastLength: Toast.LENGTH_SHORT);
       return null;
     }
   }
 
-
-///kalau add list static//////
+  ///kalau add list static//////
 /*List GetStudent(){
     return[
       Students(

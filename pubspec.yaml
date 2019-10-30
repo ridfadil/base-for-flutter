@@ -39,6 +39,7 @@ dependencies:
   pointycastle: ^1.0.1
   flutter_udid: ^1.0.0
   open_file: ^2.0.3
+  pk_skeleton:
   path_provider: ^0.5.0-alpha.2
   flutter_swiper: ^1.1.4
   flutter_pagewise: ^1.2.3
