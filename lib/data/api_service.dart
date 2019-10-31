@@ -62,7 +62,7 @@ class ApiService {
             image.path,
             filename: basename(image.path))
       });
-      print("Form_data : " + formData.toString());
+//      print("Form_data : " + formData.toString());
       response = await dio.post("/report", data: formData);
       return response;
     } on DioError catch (e) {
