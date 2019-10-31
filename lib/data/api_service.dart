@@ -16,7 +16,30 @@ Dio dio;
 class ApiService {
   static String BASE_URL = "http://premier.pragmainf.tech";
 
-  /////////////// END POINT //////////////////////////
+  /////////////////////// Settings Dio /////////////////////////////
+  static _dioSetting(bool isHeader) async {
+    dio = new Dio();
+    dio.options.baseUrl = BASE_URL;
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
+    if (isHeader) dio.options.headers = await getHeaders();
+    return dio;
+  }
+
+  //Tambah Kalau Ada Headers disini
+  static getHeaders() async {
+    Map<String, String> header = {};
+    header.clear();
+    String token = await Session.getToken();
+    header = {
+      "Authorization": "Bearer " + token,
+      "Accept": "application/json",
+    };
+    print("HEADERSS: " + header.toString());
+    return header;
+  }
+
+  /////////////////////// END POINT //////////////////////////
   static login(
       {@required BuildContext context,
       @required String email,
@@ -25,9 +48,9 @@ class ApiService {
     await _dioSetting(false);
     params['username'] = email;
     params['password'] = password;
-//    print(params.toString());
+    print(params.toString());
     response = await dio.post("/auth/login", data: params);
-//    print(response);
+    print(response);
     return response;
   }
 
@@ -62,7 +85,6 @@ class ApiService {
             image.path,
             filename: basename(image.path))
       });
-//      print("Form_data : " + formData.toString());
       response = await dio.post("/report", data: formData);
       return response;
     } on DioError catch (e) {
@@ -82,26 +104,15 @@ class ApiService {
     }
   }
 
-  ///////////////// Settings Dio /////////////////////////////
-  static _dioSetting(bool isHeader) async {
-    dio = new Dio();
-    dio.options.baseUrl = BASE_URL;
-    dio.options.connectTimeout = 5000; //5s
-    dio.options.receiveTimeout = 3000;
-    if (isHeader) dio.options.headers = await getHeaders();
-    return dio;
-  }
-
-  //Tambah Kalau Ada Headers disini
-  static getHeaders() async {
-    Map<String, String> header = {};
-    header.clear();
-    String token = await Session.getToken();
-    header = {
-      "Authorization": "Bearer " + token,
-      "Accept": "application/json",
-    };
-    print("HEADERSS: " + header.toString());
-    return header;
+  static getType({@required BuildContext context}) async {
+    params.clear();
+    try {
+      Dio dio = await _dioSetting(true);
+      response = await dio.get("/forms/tipe");
+      print("AAA" + response.toString());
+      return response;
+    } on DioError catch (e) {
+      return ReportResponse.fromJson({'message': e.message});
+    }
   }
 }

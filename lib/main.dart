@@ -1,8 +1,9 @@
-import 'package:base_for_flutter/pages/views/report_list.dart';
+import 'package:base_for_flutter/pages/views/list_report.dart';
 import 'package:base_for_flutter/pages/views/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 import 'auth/login.dart';
+import 'utils/values/colors.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,15 +13,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "BASE FLUTTER 2",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        primaryColor: Colors.blueAccent,
-      ),
       home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: new ThemeData(
+          primarySwatch: Colors.blue,
+          primaryColor: MyColor.blue,
+          bottomAppBarColor: MyColor.blue,
+          accentColor: Colors.deepPurple,
+          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white))),
       routes: {
-        'login': (context) => Login(),
-        'dashboard': (context) => StudentActivity(),
+        ///Bisa untuk routes pakai name
+
+        '/login': (context) => Login(),
+        '/dashboard': (context) => ListReport(),
       },
     );
   }

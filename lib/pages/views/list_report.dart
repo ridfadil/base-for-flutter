@@ -1,5 +1,6 @@
 import 'package:base_for_flutter/data/api_service.dart';
 import 'package:base_for_flutter/data/constants.dart';
+import 'package:base_for_flutter/data/session.dart';
 import 'package:base_for_flutter/models/m_report.dart';
 import 'package:base_for_flutter/pages/items/i_report.dart';
 import 'package:base_for_flutter/utils/values/colors.dart';
@@ -7,15 +8,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pk_skeleton/pk_skeleton.dart';
-
 import 'create_report.dart';
+import 'list_type.dart';
 
-class StudentActivity extends StatefulWidget {
+class ListReport extends StatefulWidget {
   @override
-  _StudentActivityState createState() => _StudentActivityState();
+  _ListReportState createState() => _ListReportState();
 }
 
-class _StudentActivityState extends State<StudentActivity> {
+class _ListReportState extends State<ListReport> {
+
   ///Untuk search
   var _searchEdit = new TextEditingController();
   String _searchText = "";
@@ -32,6 +34,20 @@ class _StudentActivityState extends State<StudentActivity> {
         appBar: AppBar(
           title: Text('List Report'),
           backgroundColor: MyColor.skyBlue,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.view_list),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListType()));
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                _showLogout();
+              },
+            ),
+          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -39,7 +55,6 @@ class _StudentActivityState extends State<StudentActivity> {
                 child: Column(
               children: <Widget>[
                 FutureBuilder(
-
                     /// ini panggil API dengan snapshotnya
                     future: getReport(),
                     builder: (context, snapshot) {
@@ -129,7 +144,7 @@ class _StudentActivityState extends State<StudentActivity> {
   }
 
   ///kalau di android sama kaya onQueryTextChange
-  _StudentActivityState() {
+  _ListReportState() {
     _searchEdit.addListener(() {
       if (_searchEdit.text.isEmpty) {
         setState(() {
@@ -202,7 +217,6 @@ class _StudentActivityState extends State<StudentActivity> {
     final Response responses = await ApiService.getReport(context: context);
     await Future<String>.delayed(const Duration(milliseconds: 300));
     if (responses.statusCode == APIResponseCode.SUCCESS) {
-//      var res = new Map<String, dynamic>.from(responses.data);
       ReportResponse reportList = ReportResponse.fromJson(responses.data);
       return reportList.dataList;
     } else {
@@ -213,7 +227,50 @@ class _StudentActivityState extends State<StudentActivity> {
     }
   }
 
-  ///kalau add list static//////
+  ///Dialog logout
+  void _showLogout() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return WillPopScope(
+          onWillPop: () async {
+            Future.value(false);
+            return false; //return a `Future` with false value so this route cant be popped or closed.
+          },
+          child: AlertDialog(
+            title: new Text("Dialog Logout"),
+            content:
+            new Text("Apakah anda ingin logout?"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                  child: new Text("Tidak"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              new FlatButton(
+                child: new Text("Logout"),
+                onPressed: () {
+                  clearSession();
+                  Navigator.pushNamedAndRemoveUntil(context, "/login", (Route<dynamic> route) => false);
+                },
+              ),
+            ],
+          ) ??
+              false,
+        );
+      },
+    );
+  }
+
+  ///Untuk Logout
+  void clearSession() async {
+    await Session.clear();
+  }
+
+  ///kalau add list static ke list//////
 /*List GetStudent(){
     return[
       Students(

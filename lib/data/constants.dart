@@ -2,6 +2,7 @@
 class APIResponseCode {
   static const int SUCCESS = 200;
   static const int UNAUTHORIZED = 401;
+  static const int UNPROCCESS = 422;
 }
 
 class SharedPrefKeys {

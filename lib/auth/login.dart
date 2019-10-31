@@ -2,7 +2,7 @@ import 'package:base_for_flutter/data/api_service.dart';
 import 'package:base_for_flutter/data/constants.dart';
 import 'package:base_for_flutter/data/session.dart';
 import 'package:base_for_flutter/models/m_token.dart';
-import 'package:base_for_flutter/pages/views/report_list.dart';
+import 'package:base_for_flutter/pages/views/list_report.dart';
 import 'package:base_for_flutter/utils/helper/dialog.dart';
 import 'package:base_for_flutter/utils/values/colors.dart';
 import 'package:dio/dio.dart';
@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => StudentActivity()));
+                builder: (BuildContext context) => ListReport()));
       } else {
         Fluttertoast.showToast(
             msg: response.statusCode.toString() + " - " + response.toString(),
@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
 
   void _setSession(TokenResponse token) {
     Session.setToken(token.accessToken);
-    Session.isLoggedIn();
+    Session.setLoggedIn(true);
   }
 
   @override
