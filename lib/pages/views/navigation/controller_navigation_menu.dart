@@ -1,6 +1,6 @@
-import 'package:base_for_flutter/pages/views/tabnav/tab_1.dart';
-import 'package:base_for_flutter/pages/views/tabnav/tab_2.dart';
-import 'package:base_for_flutter/pages/views/tabnav/tab_3.dart';
+import 'package:base_for_flutter/pages/views/navigation/tab_1.dart';
+import 'package:base_for_flutter/pages/views/navigation/tab_2.dart';
+import 'package:base_for_flutter/pages/views/navigation/tab_3.dart';
 import 'package:flutter/material.dart';
 
 class DrawerItem {

@@ -1,6 +1,6 @@
-import 'package:base_for_flutter/pages/views/tabnav/controller_nav_bottom.dart';
-import 'package:base_for_flutter/pages/views/tabnav/controller_nav_tab.dart';
-import 'package:base_for_flutter/pages/views/tabnav/controller_navigation_menu.dart';
+import 'package:base_for_flutter/pages/views/navigation/controller_nav_bottom.dart';
+import 'package:base_for_flutter/pages/views/navigation/controller_nav_tab.dart';
+import 'package:base_for_flutter/pages/views/navigation/controller_navigation_menu.dart';
 import 'package:base_for_flutter/utils/values/colors.dart';
 import 'package:flutter/material.dart';
 
