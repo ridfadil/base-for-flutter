@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pk_skeleton/pk_skeleton.dart';
 import 'create_report.dart';
 import 'list_type.dart';
+import 'menu_flutter.dart';
 
 class ListReport extends StatefulWidget {
   @override
@@ -35,6 +36,12 @@ class _ListReportState extends State<ListReport> {
           title: Text('List Report'),
           backgroundColor: MyColor.skyBlue,
           actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.tab),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MenuFlutter()));
+              },
+            ),
             IconButton(
               icon: Icon(Icons.view_list),
               onPressed: () {
@@ -124,6 +131,7 @@ class _ListReportState extends State<ListReport> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CreateReport(),
+
                           ),
                         );
                       },

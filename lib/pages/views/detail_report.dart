@@ -33,6 +33,7 @@ class _DetailReportState extends State<DetailReport> {
       appBar: AppBar(
         title: Text('Detail Form'),
       ),
+
       body: Container(
         margin: EdgeInsets.all(10.0),
         child: Column(

@@ -16,6 +16,7 @@ class ReportResponse {
     meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
   }
 
+
   List<Data> reportFromJson(String jsonData) {
     final data = json.decode(jsonData);
     return List<Data>.from(data.map((item) => Data.fromJson(item)));

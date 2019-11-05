@@ -85,6 +85,7 @@ class ApiService {
             image.path,
             filename: basename(image.path))
       });
+
       response = await dio.post("/report", data: formData);
       return response;
     } on DioError catch (e) {
